@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Combinatii Aleatoare</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="app.min.css">
+    <style>
+      .text-center {
+        text-align: center;
+      }
+      .app-section {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app-page" data-page="home">
+      <div class="app-topbar">
+        <div class="app-title">Combinatii Aleatoare</div>
+      </div>
+      <div class="app-content">
+        <div class="app-section text-center">
+          Cate secunde intre combinatii?
+        </div>
+        <div class="app-section">
+          <div class="app-button start" data-seconds="2">2 Secunde</div>
+          <div class="app-button start" data-seconds="3">3 Secunde</div>
+          <div class="app-button start" data-seconds="4">4 Secunde</div>
+          <div class="app-button start" data-seconds="5">5 Secunde</div>
+          <div class="app-button start" data-seconds="6">6 Secunde</div>
+          <div class="app-button start" data-seconds="7">7 Secunde</div>
+          <div class="app-button start" data-seconds="8">8 Secunde</div>
+        </div>
+        <div class="app-section">
+          <div class="app-button" id="stop">Stop</div>
+        </div>
+      </div>
+    </div>
+
+    <script src="zepto.js"></script>
+    <script src="app.min.js"></script>
+    <script>
+
+      var combos;
+      var running = false;
+
+      function playCombo() {
+
+        var firstNumber = Math.ceil( Math.random() * 4 ) * 2 - 1;
+        var secondNumber = Math.ceil( Math.random() * 4 ) * 2;
+
+        var firstAudio = new Audio(firstNumber.toString() + '.mp3');
+        var secondAudio = new Audio(secondNumber.toString() + '.mp3');
+
+        firstAudio.play();
+        firstAudio.onended = function() {secondAudio.play();}
+      }
+
+      function stopPlaying() {
+
+          clearInterval(combos);
+
+          running = false;
+      }
+
+      App.controller('home', function (page) {
+
+        $(page).find('.start').on('click', function () {
+
+          seconds = $(this)[0].dataset.seconds;
+
+          stopPlaying();
+
+          playCombo();
+
+          combos = setInterval(function() {
+            playCombo();
+          }, seconds * 1000);
+
+          running = true;
+
+        });
+
+        $(page).find('#stop').on('click', function () {
+          stopPlaying();
+        });
+      });
+
+      try {
+        App.restore();
+      } catch (err) {
+        App.load('home');
+      }
+    </script>
+  </body>
+</html>
