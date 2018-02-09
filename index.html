@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Combinatii aleatoare de brate</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <title>Combinații aleatoare de brate</title>
     <link rel="stylesheet" href="app.min.css">
     <style>
       .text-center {
@@ -11,17 +12,29 @@
       .app-section {
         font-weight: bold;
       }
+      .app-topbar .app-button span {
+        padding: 3px 5px;
+        border-radius: 6px;
+        border: 2px solid black;
+        font-size: 1.2em;
+        font-weight: bold !important;
+      }
+      .selected {
+        border: 2px solid white !important;s
+      }
     </style>
   </head>
 
   <body>
     <div class="app-page" data-page="home">
       <div class="app-topbar">
-        <div class="app-title">Combinatii aleatoare de brate</div>
+        <div class="app-button left"><span id="one">Singur</span></div>
+        <div class="app-title"><span id="to-one">Cum bagi?</div>
+        <div class="app-button right"><span id="two" class="selected">În doi</span></div>
       </div>
       <div class="app-content">
         <div class="app-section text-center">
-          Cate secunde intre combinatii?
+          Câte secunde între combinații?
         </div>
         <div class="app-section">
           <div class="app-button start" data-seconds="2">2 Secunde</div>
@@ -44,11 +57,12 @@
 
       var combos;
       var running = false;
+      var players = 4;
 
       function playCombo() {
 
-        var firstNumber = Math.ceil( Math.random() * 4 ) * 2 - 1;
-        var secondNumber = Math.ceil( Math.random() * 4 ) * 2;
+        var firstNumber = Math.ceil( Math.random() * players ) * 2 - 1;
+        var secondNumber = Math.ceil( Math.random() * players ) * 2;
 
         var firstAudio = new Audio(firstNumber.toString() + '.mp3');
         var secondAudio = new Audio(secondNumber.toString() + '.mp3');
@@ -65,6 +79,28 @@
       }
 
       App.controller('home', function (page) {
+
+        $(page).find('.left').on('click', function () {
+
+          if (players === 4) {
+
+            $("#one").addClass('selected');
+            $("#two").removeClass('selected');
+
+            players = 3;
+          }
+        });
+
+        $(page).find('.right').on('click', function () {
+
+          if (players === 3) {
+
+            $("#one").removeClass('selected');
+            $("#two").addClass('selected');
+
+            players = 4;
+          }
+        });
 
         $(page).find('.start').on('click', function () {
 
