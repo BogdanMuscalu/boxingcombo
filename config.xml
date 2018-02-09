@@ -18,4 +18,8 @@
         Bogdan Muscalu
     </author>
 
+    <preference name="windows-appx-target" value="8.1-phone" />
+
+    <icon src="icon.png" />
+
 </widget>
