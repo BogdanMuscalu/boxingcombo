@@ -22,7 +22,7 @@
       .selected {
         border: 2px solid #fff !important;
       }
-      #nine {
+      .more {
         display: none;
       }
     </style>
@@ -42,14 +42,15 @@
           Câte secunde între combinații?
         </div>
         <div class="app-section">
-          <div class="app-button start" id="two" data-seconds="2">2 Secunde</div>
-          <div class="app-button start" id="three" data-seconds="3">3 Secunde</div>
+          <div class="app-button start less" data-seconds="2">2 Secunde</div>
+          <div class="app-button start less" data-seconds="3">3 Secunde</div>
           <div class="app-button start" data-seconds="4">4 Secunde</div>
           <div class="app-button start" data-seconds="5">5 Secunde</div>
           <div class="app-button start" data-seconds="6">6 Secunde</div>
           <div class="app-button start" data-seconds="7">7 Secunde</div>
           <div class="app-button start" data-seconds="8">8 Secunde</div>
-          <div class="app-button start" id="nine" data-seconds="9">9 Secunde</div>
+          <div class="app-button start more" data-seconds="9">9 Secunde</div>
+          <div class="app-button start more" data-seconds="9">10 Secunde</div>
         </div>
         <div class="app-section">
           <div class="app-button" id="stop">Stop</div>
@@ -79,15 +80,15 @@
           if ( playerString === "1" ) {
             $("#onePlayer").addClass('selected');
             $("#twoPlayers").removeClass('selected');
-            $("#two").hide();
-            $("#nine").show();
-            $("#three").css("margin-top", "0");
+            $(".less").hide();
+            $(".more").show();
+            $(".less").last().next().css("margin-top", "0");
           } else {
             $("#onePlayer").removeClass('selected');
             $("#twoPlayers").addClass('selected');
-            $("#two").show();
-            $("#nine").hide();
-            $("#three").css("margin-top", "8px");
+            $(".less").show();
+            $(".more").hide();
+            $(".less").last().next().css("margin-top", "8px");
           }
           oldPlayers = playerString;
           if ( typeof localStorage !== 'undefined' ) {
@@ -150,16 +151,17 @@
 
         $(page).find('.players').on('click', function () {
 
+          stopPlaying();
+
           players = $(this)[0].dataset.players;
           setPlayers(players);
         });
 
         $(page).find('.start').on('click', function () {
 
-          seconds = $(this)[0].dataset.seconds;
-
           stopPlaying();
 
+          seconds = $(this)[0].dataset.seconds;
           playCombo();
 
           combos = setInterval(function() {
