@@ -61,6 +61,17 @@
       var running = false;
       var players = 2;
 
+      if ( typeof localStorage !== 'undefined' ) {
+        if ( localStorage.getItem( 'comboPlayers' ) ) {
+          players = parseInt( localStorage.getItem( 'comboPlayers' ) );
+
+          if ( players === 1 ) {
+            $("#one").addClass('selected');
+            $("#two").removeClass('selected');
+          }
+        }
+      }
+
       function playCombo() {
 
         if (players === 2) {
@@ -118,6 +129,9 @@
             $("#two").removeClass('selected');
 
             players = 1;
+            if ( typeof localStorage !== 'undefined' ) {
+              localStorage.setItem( 'comboPlayers', 1 );
+            }
           }
         });
 
@@ -129,6 +143,9 @@
             $("#two").addClass('selected');
 
             players = 2;
+            if ( typeof localStorage !== 'undefined' ) {
+              localStorage.setItem( 'comboPlayers', 2 );
+            }
           }
         });
 
