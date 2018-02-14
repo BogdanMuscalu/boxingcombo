@@ -15,12 +15,15 @@
       .app-topbar .app-button span {
         padding: 3px 5px;
         border-radius: 6px;
-        border: 2px solid black;
+        border: 2px solid #000;
         font-size: 1.2em;
         font-weight: bold !important;
       }
       .selected {
-        border: 2px solid white !important;s
+        border: 2px solid #fff !important;
+      }
+      #nine {
+        display: none;
       }
     </style>
   </head>
@@ -28,24 +31,25 @@
   <body>
     <div class="app-page" data-page="home">
       <div class="app-topbar">
-        <div class="app-button left"><span id="one">Singur</span></div>
+        <div class="app-button left players" data-players="1"><span id="onePlayer">Singur</span></div>
         <div class="app-title">
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cum bagi?
         </div>
-        <div class="app-button right"><span id="two" class="selected">În doi</span></div>
+        <div class="app-button right players" data-players="2"><span id="twoPlayers" class="selected">În doi</span></div>
       </div>
       <div class="app-content">
         <div class="app-section text-center">
           Câte secunde între combinații?
         </div>
         <div class="app-section">
-          <div class="app-button start" data-seconds="2">2 Secunde</div>
-          <div class="app-button start" data-seconds="3">3 Secunde</div>
+          <div class="app-button start" id="two" data-seconds="2">2 Secunde</div>
+          <div class="app-button start" id="three" data-seconds="3">3 Secunde</div>
           <div class="app-button start" data-seconds="4">4 Secunde</div>
           <div class="app-button start" data-seconds="5">5 Secunde</div>
           <div class="app-button start" data-seconds="6">6 Secunde</div>
           <div class="app-button start" data-seconds="7">7 Secunde</div>
           <div class="app-button start" data-seconds="8">8 Secunde</div>
+          <div class="app-button start" id="nine" data-seconds="9">9 Secunde</div>
         </div>
         <div class="app-section">
           <div class="app-button" id="stop">Stop</div>
@@ -59,29 +63,48 @@
 
       var combos;
       var running = false;
-      var players = 2;
+      var oldPlayers = "2";
+      var players;
       var currentAudio = new Audio();
 
       if ( typeof localStorage !== 'undefined' ) {
         if ( localStorage.getItem( 'comboPlayers' ) ) {
-          players = parseInt( localStorage.getItem( 'comboPlayers' ) );
+          players = localStorage.getItem( 'comboPlayers' );
+        }
+      }
+      setPlayers( players );
 
-          if ( players === 1 ) {
-            $("#one").addClass('selected');
-            $("#two").removeClass('selected');
+      function setPlayers( playerString ) {
+        if ( playerString !== oldPlayers ) {
+          if ( playerString === "1" ) {
+            $("#onePlayer").addClass('selected');
+            $("#twoPlayers").removeClass('selected');
+            $("#two").hide();
+            $("#nine").show();
+            $("#three").css("margin-top", "0");
+          } else {
+            $("#onePlayer").removeClass('selected');
+            $("#twoPlayers").addClass('selected');
+            $("#two").show();
+            $("#nine").hide();
+            $("#three").css("margin-top", "8px");
+          }
+          oldPlayers = playerString;
+          if ( typeof localStorage !== 'undefined' ) {
+            localStorage.setItem( 'comboPlayers', playerString );
           }
         }
       }
 
       function playCombo() {
 
-        if (players === 2) {
+        if ( players === "2" ) {
 
           var firstStrike = Math.ceil( Math.random() * 4 ) * 2 - 1;
           var secondStrike = Math.ceil( Math.random() * 4 ) * 2;
 
-          var firstAudio = new Audio(firstStrike.toString() + '.mp3');
-          var secondAudio = new Audio(secondStrike.toString() + '.mp3');
+          var firstAudio = new Audio('audio/' + firstStrike.toString() + '.mp3');
+          var secondAudio = new Audio('audio/' + secondStrike.toString() + '.mp3');
 
           currentAudio = firstAudio; firstAudio.play();
           firstAudio.onended = function() {currentAudio = secondAudio; secondAudio.play();}
@@ -95,11 +118,11 @@
           var fourthStrike = Math.ceil(Math.random() * 4) * 2;
           var legStrike = Math.ceil(Math.random() * 5) + 8;
 
-          var firstAudio = new Audio(firstStrike.toString() + '.mp3');
-          var secondAudio = new Audio(secondStrike.toString() + '.mp3');
-          var thirdAudio = new Audio(thirdStrike.toString() + '.mp3');
-          var fourthAudio = new Audio(fourthStrike.toString() + '.mp3');
-          var lastAudio = new Audio(legStrike.toString() + '.mp3');
+          var firstAudio = new Audio('audio/' + firstStrike.toString() + '.mp3');
+          var secondAudio = new Audio('audio/' + secondStrike.toString() + '.mp3');
+          var thirdAudio = new Audio('audio/' + thirdStrike.toString() + '.mp3');
+          var fourthAudio = new Audio('audio/' + fourthStrike.toString() + '.mp3');
+          var lastAudio = new Audio('audio/' + legStrike.toString() + '.mp3');
 
           currentAudio = firstAudio; firstAudio.play();
           firstAudio.onended = function() {currentAudio = secondAudio; secondAudio.play();}
@@ -125,32 +148,10 @@
 
       App.controller('home', function (page) {
 
-        $(page).find('.left').on('click', function () {
+        $(page).find('.players').on('click', function () {
 
-          if (players === 2) {
-
-            $("#one").addClass('selected');
-            $("#two").removeClass('selected');
-
-            players = 1;
-            if ( typeof localStorage !== 'undefined' ) {
-              localStorage.setItem( 'comboPlayers', 1 );
-            }
-          }
-        });
-
-        $(page).find('.right').on('click', function () {
-
-          if (players === 1) {
-
-            $("#one").removeClass('selected');
-            $("#two").addClass('selected');
-
-            players = 2;
-            if ( typeof localStorage !== 'undefined' ) {
-              localStorage.setItem( 'comboPlayers', 2 );
-            }
-          }
+          players = $(this)[0].dataset.players;
+          setPlayers(players);
         });
 
         $(page).find('.start').on('click', function () {
