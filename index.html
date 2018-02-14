@@ -59,48 +59,76 @@
 
       var combos;
       var running = false;
-      var players = 4;
+      var players = 2;
 
       function playCombo() {
 
-        var firstNumber = Math.ceil( Math.random() * players ) * 2 - 1;
-        var secondNumber = Math.ceil( Math.random() * players ) * 2;
+        if (players === 2) {
 
-        var firstAudio = new Audio(firstNumber.toString() + '.mp3');
-        var secondAudio = new Audio(secondNumber.toString() + '.mp3');
+          var firstStrike = Math.ceil( Math.random() * 4 ) * 2 - 1;
+          var secondStrike = Math.ceil( Math.random() * 4 ) * 2;
 
-        firstAudio.play();
-        firstAudio.onended = function() {secondAudio.play();}
+          var firstAudio = new Audio(firstStrike.toString() + '.mp3');
+          var secondAudio = new Audio(secondStrike.toString() + '.mp3');
+
+          firstAudio.play();
+          firstAudio.onended = function() {secondAudio.play();}
+
+        } else {
+
+          var firstStrike = Math.ceil(Math.random() * 2) * 2 - 1;
+          var secondStrike = Math.ceil(Math.random() * 4) * 2;
+          var thirdStrike = Math.ceil(Math.random() * 3) * 2 + 1;
+          var addFourthStrike = Math.floor(Math.random() * 2);
+          var fourthStrike = Math.ceil(Math.random() * 4) * 2;
+          var legStrike = Math.ceil(Math.random() * 5) + 8;
+
+          var firstAudio = new Audio(firstStrike.toString() + '.mp3');
+          var secondAudio = new Audio(secondStrike.toString() + '.mp3');
+          var thirdAudio = new Audio(thirdStrike.toString() + '.mp3');
+          var fourthAudio = new Audio(fourthStrike.toString() + '.mp3');
+          var lastAudio = new Audio(legStrike.toString() + '.mp3');
+
+          firstAudio.play();
+          firstAudio.onended = function() {secondAudio.play();}
+          secondAudio.onended = function() {thirdAudio.play();}
+          if ( addFourthStrike ) {
+              thirdAudio.onended = function() {fourthAudio.play();}
+              fourthAudio.onended = function() {lastAudio.play();}
+          } else {
+              thirdAudio.onended = function() {lastAudio.play();}
+          }
+        }
       }
 
       function stopPlaying() {
 
-          clearInterval(combos);
+        clearInterval(combos);
 
-          running = false;
+        running = false;
       }
 
       App.controller('home', function (page) {
 
         $(page).find('.left').on('click', function () {
 
-          if (players === 4) {
+          if (players === 2) {
 
             $("#one").addClass('selected');
             $("#two").removeClass('selected');
 
-            players = 3;
+            players = 1;
           }
         });
 
         $(page).find('.right').on('click', function () {
 
-          if (players === 3) {
+          if (players === 1) {
 
             $("#one").removeClass('selected');
             $("#two").addClass('selected');
 
-            players = 4;
+            players = 2;
           }
         });
 
