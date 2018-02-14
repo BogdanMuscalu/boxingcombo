@@ -60,6 +60,7 @@
       var combos;
       var running = false;
       var players = 2;
+      var currentAudio = new Audio();
 
       if ( typeof localStorage !== 'undefined' ) {
         if ( localStorage.getItem( 'comboPlayers' ) ) {
@@ -82,8 +83,8 @@
           var firstAudio = new Audio(firstStrike.toString() + '.mp3');
           var secondAudio = new Audio(secondStrike.toString() + '.mp3');
 
-          firstAudio.play();
-          firstAudio.onended = function() {secondAudio.play();}
+          currentAudio = firstAudio; firstAudio.play();
+          firstAudio.onended = function() {currentAudio = secondAudio; secondAudio.play();}
 
         } else {
 
@@ -100,19 +101,22 @@
           var fourthAudio = new Audio(fourthStrike.toString() + '.mp3');
           var lastAudio = new Audio(legStrike.toString() + '.mp3');
 
-          firstAudio.play();
-          firstAudio.onended = function() {secondAudio.play();}
-          secondAudio.onended = function() {thirdAudio.play();}
+          currentAudio = firstAudio; firstAudio.play();
+          firstAudio.onended = function() {currentAudio = secondAudio; secondAudio.play();}
+          secondAudio.onended = function() {currentAudio = thirdAudio; thirdAudio.play();}
           if ( addFourthStrike ) {
-              thirdAudio.onended = function() {fourthAudio.play();}
-              fourthAudio.onended = function() {lastAudio.play();}
+            thirdAudio.onended = function() {currentAudio = fourthAudio; fourthAudio.play();}
+            fourthAudio.onended = function() {currentAudio = lastAudio; lastAudio.play();}
           } else {
-              thirdAudio.onended = function() {lastAudio.play();}
+            thirdAudio.onended = function() {currentAudio = lastAudio; lastAudio.play();}
           }
         }
       }
 
       function stopPlaying() {
+
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
 
         clearInterval(combos);
 
