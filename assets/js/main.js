@@ -14,7 +14,7 @@ var durationsArray = [0, 365.714, 391.837, 365.714, 417.959, 470.204, 548.571, 5
 // build audios array, starting at index 1
 var audiosArray = [0];
 for ( var i = 1; i <= 13; i++ ) {
-    audiosArray.push( new Audio( window.location.pathname + '/assets/audio/' + i.toString() + '.mp3' ) );
+    audiosArray.push( new Audio( 'assets/audio/' + i.toString() + '.mp3' ) );
 }
 
 // initial player setting if not found in local storage
