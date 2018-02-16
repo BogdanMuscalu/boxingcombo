@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <title>Combinații aleatoare de brate</title>
+    <link rel="stylesheet" href="assets/css/app.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+<div class="app-page" data-page="home">
+    <div class="app-topbar">
+        <div class="app-button left players" data-players="1"><span id="onePlayer">Singur</span></div>
+        <div class="app-title">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cum bagi?
+        </div>
+        <div class="app-button right players" data-players="2"><span id="twoPlayers" class="selected">În doi</span>
+        </div>
+    </div>
+    <div class="app-content">
+        <div class="app-section text-center">
+            Câte secunde între combinații?
+        </div>
+        <div class="app-section">
+            <div class="app-button start less" data-seconds="2">2 Secunde</div>
+            <div class="app-button start less" data-seconds="3">3 Secunde</div>
+            <div class="app-button start" data-seconds="4">4 Secunde</div>
+            <div class="app-button start" data-seconds="5">5 Secunde</div>
+            <div class="app-button start" data-seconds="6">6 Secunde</div>
+            <div class="app-button start" data-seconds="7">7 Secunde</div>
+            <div class="app-button start" data-seconds="8">8 Secunde</div>
+            <div class="app-button start more" data-seconds="9">9 Secunde</div>
+            <div class="app-button start more" data-seconds="9">10 Secunde</div>
+        </div>
+        <div class="app-section">
+            <div class="app-button" id="stop">Stop</div>
+        </div>
+    </div>
+</div>
+
+<script src="assets/js/zepto.js"></script>
+<script src="assets/js/app.min.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+
+    // app.js page controller
+    App.controller('home', function (page) {
+
+        // when clicking a button to change the players setting
+        $(page).find('.players').on('click', function () {
+
+            stopPlaying();
+
+            players = $(this)[0].dataset.players;
+            setPlayers(players);
+        });
+
+        // when clicking a button to start playing
+        $(page).find('.start').on('click', function () {
+
+            stopPlaying();
+
+            var seconds = $(this)[0].dataset.seconds;
+
+            playCombo(createCombo());
+
+            comboInterval = setInterval(function () {
+                playCombo(createCombo());
+            }, seconds * 1000);
+        });
+
+        // when clicking the stop button
+        $(page).find('#stop').on('click', function () {
+
+            stopPlaying();
+        });
+    });
+
+    try {
+        App.restore();
+    } catch (err) {
+        App.load('home');
+    }
+
+</script>
+</body>
+</html>

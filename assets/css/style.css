@@ -1,0 +1,25 @@
+/* custom styles */
+
+.text-center {
+    text-align: center;
+}
+
+.app-section {
+    font-weight: bold;
+}
+
+.app-topbar .app-button span {
+    padding: 3px 5px;
+    border-radius: 6px;
+    border: 2px solid #000;
+    font-size: 1.2em;
+    font-weight: bold !important;
+}
+
+.selected {
+    border: 2px solid #fff !important;
+}
+
+.more {
+    display: none;
+}
